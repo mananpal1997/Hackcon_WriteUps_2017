@@ -163,3 +163,19 @@ WriteUps for CTF event Hackcon 2017 by IIIT-D
    So, I wrote up a [python script](http://bit.ly/2wf5xZd) to recursively decode and store each image until there's no base64 code hidden in the file anymore. Inspecting all the decoded png files, I noticed that the png files contained section of flags. There were total 30 pngs. To assemble them all together and make the flag more easily readable, run the command `montage final-*png -tile 6x5 -geometry +0+0 flag.png`
    
    When you open the flag.png, you can easily read the flag as `d4rk{1mag3_m4n1pul4t10n_f7w}c0d3`
+## Crypto
+1. **RSA-2**
+
+   > For those, who don't know much about rsa and it's encryption and decryption algorithm, have a look [here](https://en.wikipedia.org/wiki/RSA_(cryptosystem))
+
+   We're given following data
+   ```
+   n = 109676931776753394141394564514720734236796584022842820507613945978304098920529412415619708851314423671483225500317195833435789174491417871864260375066278885574232653256425434296113773973874542733322600365156233965235292281146938652303374751525426102732530711430473466903656428846184387282528950095967567885381
+   e = 49446678600051379228760906286031155509742239832659705731559249988210578539211813543612425990507831160407165259046991194935262200565953842567148786053040450198919753834397378188932524599840027093290217612285214105791999673535556558448523448336314401414644879827127064929878383237432895170442176211946286617205
+   c = 103280644092615059984518332609100925251130437801342718478803923990158474621180283788652329522078935869010936203566024336697568861166241737937884153980866061431062015970439320809653170936674539901900312536610219900459284854811622720209705994060764318380465515920139663572083312965314519159261624303103692125635
+   ```
+   First thing that would come to mind is find p and q by facorizing n. But **LOL**, can't factorise such huge number. Interesting fact is that such lalrge value of e is not usually the case. I googled about it a bit, and found that RSA with such large e is easily prone to [Wiener Attack](https://en.wikipedia.org/wiki/Wiener%27s_attack). So, I quickly wrote a [python script](http://bit.ly/2xnxKx0) to solve this challenge.
+   ```
+   $ python rsa_2.py
+   d4rk{1_70ld_y0u_th15_would_8e_more_difficult}c0de
+   ```
