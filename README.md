@@ -94,11 +94,11 @@ WriteUps for CTF event Hackcon 2017 by IIIT-D
    
    First thing that comes to mind after reading this is, there should be some vulnerability/exploit gedit/PHP related. After reading about gedit a little bit, I came to know that it autosaves files with a `~` at end, example: `index.php~`. This can be used to pull source code / files from the server.
    
-   On the website link (https://defcon.org.in:6062) provided in the challenge, after trying some guess username and password combination, it is observed that the data is passed to `checker.php` to verify the credentials.
+   On the website link (http://defcon.org.in:6062) provided in the challenge, after trying some guess username and password combination, it is observed that the data is passed to `checker.php` to verify the credentials.
    ![](https://ibin.co/3YI69SDcs3m1.png)
    ![](https://ibin.co/3YI6nPytYmr7.png)
    
-   So, I just change the url to https://defcon.org.in:6062/checker.php~ and Voila! I've downloaded the checker.php file and now, have the source code that checks my credentials. Lets have a look at `checker.php~`
+   So, I just change the url to http://defcon.org.in:6062/checker.php~ and Voila! I've downloaded the checker.php file and now, have the source code that checks my credentials. Lets have a look at `checker.php~`
    ```
    <html>
    <head></head>
