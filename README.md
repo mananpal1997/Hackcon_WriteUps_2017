@@ -179,3 +179,78 @@ WriteUps for CTF event Hackcon 2017 by IIIT-D
    $ python rsa_2.py
    d4rk{1_70ld_y0u_th15_would_8e_more_difficult}c0de
    ```
+## Bacche (Easy Category Challenges)
+1. **Rotate-it**
+
+   > Found this weird code can you make something out of it? q4ex{ju0_tvir$_pn3fne_va_PGS???}p0qr
+   
+   As the name suggests, this is a shift cipher with shift_key = 13. `Flag: d4rk{wh0_give$_ca3sar_in_ctf???}c0de`
+2. **High Bass**
+
+   > The secret code just became longer. VGhpcyB3YXMgaW4gYmFzZS02NDogZDRya3t0aGF0XyRpbXBsXzNuMHVnaDRfVX1jMGRl
+   
+   Again, as the name suggests, "Bass" is hinting towards base64.
+   ```
+   $ echo "VGhpcyB3YXMgaW4gYmFzZS02NDogZDRya3t0aGF0XyRpbXBsXzNuMHVnaDRfVX1jMGRl" | base64 -d
+   This was in base-64: d4rk{that_$impl_3n0ugh4_U}c0de
+   ```
+3. **File**
+
+   This can't be more easy! You're given an executable. Just run it, and it gives the flag :D
+   ```
+   $ ./one
+   d4rk{s1mpl_linux_execUt4ble}c0de
+   ```
+4. **Needle**
+
+   We're given a huge text file. Just some regex with grep and we have the flag :D
+   ```
+   $ cat text.txt | grep "d4rk[{}a-zA-Z0-9_]*"
+   ...billows caused by the waxing and d4rk{n33dle_in_a_h4ystck}c0de waning of the moon the parent of Vasudeva's...
+   ```
+5. **ALL CAPS**
+
+   > OF EKBHMGUKZHJB, Z LWALMOMWMOGF EOHJTK OL Z DTMJGX GY TFEGXOFU AB NJOEJ WFOML GY HSZOFMTVM ZKT KTHSZETX NOMJ EOHJTKMTVM, ZEEGKXOFU MG Z YOVTX LBLMTD; MJT "WFOML" DZB AT LOFUST STMMTKL (MJT DGLM EGDDGF), HZOKL GY STMMTKL, MKOHSTML GY STMMTKL, DOVMWKTL GY MJT ZAGRT, ZFX LG YGKMJ. MJT KTETORTK XTEOHJTKL MJT MTVM AB HTKYGKDOFU MJT OFRTKLT LWALMOMWMOGF. MJZFQL YGK KTZXOFU MJZM, JTKT'L BGWK YSZU: X4KQ{MKB_YZEEJ3_OYMJOL_MGG_LODHTS}E0XT
+   
+   Look closesly at the end, it looks like substitution cipher. Easy!
+   > IN CRYPTOGRAPHY, A SUBSTITUTION CIPHER IS A METHOD OF ENCODING BY WHICH UNITS OF PLAINTEXT ARE REPLACED WITH CIPHERTEXT, ACCORDING TO A FIXED SYSTEM; THE "UNITS" MAY BE SINGLE LETTERS (THE MOST COMMON), PAIRS OF LETTERS, TRIPLETS OF LETTERS, MIXTURES OF THE ABOVE, AND SO FORTH. THE RECEIVER DECIPHERS THE TEXT BY PERFORMING THE INVERSE SUBSTITUTION. THANKS FOR READING THAT, HERE'S YOUR FLAG: D4RK{TRY_FACCH3_IFTHIS_TOO_SIMPEL}C0DE
+
+6. **Caves**
+
+   We're given an image and we need to decipher it.
+   
+   ![](https://hackcon.in/files/f97abae6df054a8b8487e34c779ec3b1/cave.png)
+   
+   A little bit of googling, and we find out it's [Egyptian Glyph Alphabet](http://www.virtual-egypt.com/newhtml/hieroglyphics/sample/alphabet.gif)
+   After decoding, we get `THE FLAG IS EGYPTISBETTERTHANYOU`
+7. **RSA-1**
+
+   Very simple RSA. All the needed things are given.
+   ```
+   p = 152571978722786084351886931023496370376798999987339944199021200531651275691099103449347349897964635706112525455731825020638894818859922778593149300143162720366876072994268633705232631614015865065113917174134807989294330527442191261958994565247945255072784239755770729665527959042883079517088277506164871850439
+   q = 147521976719041268733467288485176351894757998182920217874425681969830447338980333917821370916051260709883910633752027981630326988193070984505456700948150616796672915601007075205372397177359025857236701866904448906965019938049507857761886750656621746762474747080300831166523844026738913325930146507823506104359
+   c = 8511718779884002348933302329129034304748857434273552143349006561412761982574325566387289878631104742338583716487885551483795770878333568637517519439482152832740954108568568151340772337201643636336669393323584931481091714361927928549187423697803637825181374486997812604036706926194198296656150267412049091252088273904913718189248082391969963422192111264078757219427099935562601838047817410081362261577538573299114227343694888309834727224639741066786960337752762092049561527128427933146887521537659100047835461395832978920369260824158334744269055059394177455075510916989043073375102773439498560915413630238758363023648
+   e = 65537
+   ```
+   Simple [python script](http://bit.ly/2wStLuE) to solve it.
+   ```
+   $ python rsa_1.py
+   d4rk{s1mpl3_rsa_n0t_th1s_34sy_next_time}c0de
+   ```
+8. **flag.txt**
+
+   Let's look at description.
+   > Even google won't be able to find the flag. Still you can try if you want: http://defcon.org.in:6061/
+   
+   First thing that strikes from "google won't be able to find the flag" => there's got to be robots.txt file :D
+   
+   Hitting http://defcon.org.in:6061/robots.txt returns
+   ```
+   User-agent: *
+   Disallow: /500786fbfb9cadc4834cd3783894239d
+   ```
+   Now, I got stuck at this for a while as I was trying to access http://defcon.org.in:6061/500786fbfb9cadc4834cd3783894239d but DUH, that's a directory, not a file. That's why it kept giving me 404. Hmmm, must be a file in that directory then, that I need to access.
+   
+   A couple more minutes, and it struck me. What's the name of challenge LOL? (flag.txt) :P
+   
+   So, I quickly hit the page http://defcon.org.in:6061/500786fbfb9cadc4834cd3783894239d/flag.txt in my browser and Voila! `The flag is d4rk{r0b075_7x7_4r3_v3ry_c0mm0n}c0de`
