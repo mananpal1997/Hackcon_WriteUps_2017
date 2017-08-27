@@ -58,7 +58,7 @@ WriteUps for CTF event Hackcon 2017 by IIIT-D
    ```
    Yay! Now we need to send this key to defcon.org.in:8082
    ```
-   echo "5976657559745958655976555564937857597575" | nc defcon.org.in 8082
+   $ echo "5976657559745958655976555564937857597575" | nc defcon.org.in 8082
    
    Flag: d4rk{595c7f5b595a59587f595c55557e5f5e57595b5b}c0de
    ```
