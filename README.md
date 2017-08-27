@@ -85,3 +85,73 @@ WriteUps for CTF event Hackcon 2017 by IIIT-D
    d4rk{ccjccpbsvrafrcatbpchjydiio}c0de
    ```
    Voila! That was easier than expected!
+## Web
+1. **Noobcoder**
+
+   Let's have a look at the challenge description.
+   > A junior recently started doing PHP, and makes some random shit. He uses gedit as his go-to editor with a black theme thinking it was sublime.
+   So he made this login portal, I am sure he must have left something out. Why don't you give it a try?
+   
+   First thing that comes to mind after reading this is, there should be some vulnerability/exploit gedit/PHP related. After reading about gedit a little bit, I came to know that it autosaves files with a `~` at end, example: `index.php~`. This can be used to pull source code / files from the server.
+   
+   On the website link (https://defcon.org.in:6062) provided in the challenge, after trying some guess username and password combination, it is observed that the data is passed to `checker.php` to verify the credentials.
+   ![](https://ibin.co/3YI69SDcs3m1.png)
+   ![](https://ibin.co/3YI6nPytYmr7.png)
+   
+   So, I just change the url to https://defcon.org.in:6062/checker.php~ and Voila! I've downloaded the checker.php file and now, have the source code that checks my credentials. Lets have a look at `checker.php~`
+   ```
+   <html>
+   <head></head>
+   <body>
+   <?php
+   if ($_POST["username"] == $_POST["password"] && $_POST["password"] !== $_POST["username"])
+       echo "congratulations the flag is d4rk{TODO}c0de";
+   else
+	    echo "nice try, but try again";
+   ?>
+   </body>
+   </html>
+   ```
+   Looking at if statement in the file, two things:
+   - $x == $y returns true if $x and $y evaluate to same thing irrespective of type
+   - $x !== $y returns true if $x and $y are not equal, or they are of not same type
+   
+   Both above conditions need to be fulfilled so that I can get flag.
+   
+   I quickly went on with username: "100" and password: 100 but didn't work :D ($\_POST handles everything as string by default). After thinking sometime, I found a workaround. `Username: 100, Password: 1e2`. Now both have different types but get evaluated to same value, thus satisfying both conditions. Click on Sign In, and here we go!
+   `congratulations the flag is d4rk{l0l_g3dit_m4ster_roxx}c0de`
+2. **Magic**
+
+   Lets have a look at challenge description.
+   > Everything disappears magically.
+   Can you magically prevent that?
+   http://defcon.org.in:6060/index.php
+   
+   There's hint hidden in description itself. "Everything disappears magically" -> may be something cookie/session related. So, I fire up firebug add-on in firefox and intercept requests and see what happens.
+   
+   Boom! Have a look at response headers.
+   ```
+   Connection	close
+   Content-type	text/html; charset=UTF-8
+   Host	defcon.org.in:6060
+   Set-Cookie	
+   0=%2B; expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0; path=/
+   1=%2B; expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0; path=/
+   2=%2B; expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0; path=/
+   3=%2B; expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0; path=/
+   4=%2B; expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0; path=/
+   5=%2B; expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0; path=/
+   6=%2B; expires=Thu, 01-Jan-1970 00:00:10 GMT; Max-Age=0; path=/
+   ...
+   ```
+   What's of my interest is the value being set for each id: 0=%2B, 1=%2B, 2=%2B ... so on. These are url_encoded values
+   
+   I quickly wrote a [python script](http://bit.ly/2w8lthw) to parse these mappings and decode the url_encoded data.
+   ```
+   $ python hack.py
+   ++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>>+++++++++++++++++.--.--------------.+++++++++++++.----.-----------
+   --.++++++++++++.--------.<------------.<++.>>----.+.<+++++++++++.+++++++++++++.>+++++++++++++++++.-------------
+   --.++++.+++++++++++++++.<<.>>-------.<+++++++++++++++.>+++..++++.--------.+++.<+++.<++++++++++++++++++++++++++
+   .<++++++++++++++++++++++.>++++++++++++++..>+.----.>------.+++++++.--------.<+++.>++++++++++++..-------.++.
+   ```
+   Above is nothing but, brainfuck code. Just run it through an online [brainfuck interpreter](https://copy.sh/brainfuck/). This is the output: `username: abERsdhw password: HHealskdwwpr`. Typing these credentials in the index.php form, and submitting it, redirects to `panel.php` with output: `d4rk{c00k13s_4r3_fun}c0de`. Hurray!
