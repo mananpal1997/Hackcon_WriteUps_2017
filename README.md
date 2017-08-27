@@ -155,3 +155,11 @@ WriteUps for CTF event Hackcon 2017 by IIIT-D
    .<++++++++++++++++++++++.>++++++++++++++..>+.----.>------.+++++++.--------.<+++.>++++++++++++..-------.++.
    ```
    Above is nothing but, brainfuck code. Just run it through an online [brainfuck interpreter](https://copy.sh/brainfuck/). This is the output: `username: abERsdhw password: HHealskdwwpr`. Typing these credentials in the index.php form, and submitting it, redirects to `panel.php` with output: `d4rk{c00k13s_4r3_fun}c0de`. Hurray!
+## Steg
+1. **White**
+
+   We're given a huge png [file](https://hackcon.in/files/fa152fbb6c29afbfaf4f4eb95f898245/final.png) (~47 MB). Usually stegs are most times solved by analysing spectrogram or hex code. Unfortunately, spectrogram didn't provide any hint. So, I opened the png in my hex editor (bless). Interestingly, I found huge base64 code at end of the file. When I decoded it, it gave me another png file with base64 code at the end of the file.
+   
+   So, I wrote up a [python script](http://bit.ly/2wf5xZd) to recursively decode and store each image until there's no base64 code hidden in the file anymore. Inspecting all the decoded png files, I noticed that the png files contained section of flags. There were total 30 pngs. To assemble them all together and make the flag more easily readable, run the command `montage final-*png -tile 6x5 -geometry +0+0 flag.png`
+   
+   When you open the flag.png, you can easily read the flag as `d4rk{1mag3_m4n1pul4t10n_f7w}c0d3`
