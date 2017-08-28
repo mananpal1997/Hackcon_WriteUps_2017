@@ -254,3 +254,23 @@ WriteUps for CTF event Hackcon 2017 by IIIT-D
    A couple more minutes, and it struck me. What's the name of challenge LOL? (flag.txt) :P
    
    So, I quickly hit the page http://defcon.org.in:6061/500786fbfb9cadc4834cd3783894239d/flag.txt in my browser and Voila! `The flag is d4rk{r0b075_7x7_4r3_v3ry_c0mm0n}c0de`
+9. **Numbers**
+
+   > These are some numbers, try to make sense of them.
+   
+   We're given a huge text file with data like `(361, 15, 0, 0, 0) (267, 77, 1020, 1020, 1020) (380, 272, 1020, 1020, 1020) (171, 340, 0, 0, 0)...`. After analysing for sometime, I realised that these numbers maybe (x, y, r, g, b) denoting x and y coordinates of a pixel and it's r-g-b value. And it's a binary image as rgb values of pixels were same and either 0 or 1020.
+   
+   So, I wrote a [python script](http://bit.ly/2wia6SQ) to parse this text file and make an image out of these numbers. Maybe the image will be having flag.
+   
+   Surprisingly, it was not yet the flag. It was a qr-code.
+   
+   ![](https://ibin.co/3YRdzByM3aS1.jpg)
+   
+   Still not over! When I decoded the qr-code, I got `ZDRya3txcmMwZDM1XzRyM19mdW5fdzE3aF9wMWx9YzBkZQpSYW5kb20gVGV4dCBJZ25vcmUgVGhpcyAuLi4uLi4uLi4uLi4uPT09PT09PT09PT09PT09PT09PT09`
+   
+   After thinking for a bit, I thought to go wtih the thought that it might be base64 string (length is multiple of 4). And, I was right!
+   ```
+   $ echo "ZDRya3txcmMwZDM1XzRyM19mdW5fdzE3aF9wMWx9YzBkZQpSYW5kb20gVGV4dCBJZ25vcmUgVGhpcyAuLi4uLi4uLi4uLi4uPT09PT09PT09PT09PT09PT09PT09" | base64 -d
+   d4rk{qrc0d35_4r3_fun_w17h_p1l}c0de
+   Random Text Ignore This .............=====================
+   ```
